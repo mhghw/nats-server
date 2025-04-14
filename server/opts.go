@@ -187,12 +187,20 @@ type LeafNodeOpts struct {
 	MinVersion string
 
 	// Not exported, for tests.
-	resolver    netResolver
+	resolver netResolver
+	// when using custom dialer, dialTimeout is ignored
 	dialTimeout time.Duration
 	connDelay   time.Duration
 
 	// Snapshot of configured TLS options.
 	tlsConfigOpts *TLSConfigOpts
+
+	// CustomDialer is used to override the default dialer.
+	CustomDialer CustomDialer
+}
+
+type CustomDialer interface {
+	Dial(network, address string) (net.Conn, error)
 }
 
 // SignatureHandler is used to sign a nonce from the server while
